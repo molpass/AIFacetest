@@ -1,13 +1,11 @@
-
-
-## 首页
+## 홈 화면
 ![](src/main/resources/static/images/1.png)
 
-## 上传图片
+## 이미지 업로드
 ![](src/main/resources/static/images/2.png)
 
-## 特征点识别
+## 특징점 인식
 ![](src/main/resources/static/images/3.png)
 
-## 面相分析
+## 관상 분석
 ![](src/main/resources/static/images/4.png)
