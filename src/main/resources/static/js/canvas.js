@@ -11,7 +11,7 @@ var RAF = (function() {
         window.setTimeout(callback, 1000 / 120);
     };
 })();
-// 鼠标活动时，获取鼠标坐标
+// 마우스가 움직일 때 마우스 좌표를 가져온다
 var warea = {x: null, y: null, max: 20000};
 window.onmousemove = function(e) {
     e = e || window.event;
@@ -22,8 +22,8 @@ window.onmouseout = function(e) {
     warea.x = null;
     warea.y = null;
 };
-// 添加粒子
-// x，y为粒子坐标，xa, ya为粒子xy轴加速度，max为连线的最大距离
+// 입자 추가
+// x, y는 입자 좌표, xa, ya는 입자의 x·y축 가속도, max는 선을 잇는 최대 거리
 var dots = [];
 for (var i = 0; i < 40; i++) {
     var x = Math.random() * canvas.width;
@@ -38,44 +38,44 @@ for (var i = 0; i < 40; i++) {
         max: 6000
     })
 }
-// 延迟100秒开始执行动画，如果立即执行有时位置计算会出错
+// 애니메이션을 지연 후 시작한다. 즉시 실행하면 간혹 위치 계산이 틀어질 수 있다
 setTimeout(function() {
     animate();
 }, 100);
-// 每一帧循环的逻辑
+// 매 프레임마다 반복되는 로직
 function animate() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
-    // 将鼠标坐标添加进去，产生一个用于比对距离的点数组
+    // 마우스 좌표를 추가해, 거리 비교에 쓸 점 배열을 만든다
     var ndots = [warea].concat(dots);
     dots.forEach(function(dot) {
-        // 粒子位移
+        // 입자 이동
         dot.x += dot.xa;
         dot.y += dot.ya;
-        // 遇到边界将加速度反向
+        // 경계에 닿으면 가속도를 반대로 뒤집는다
         dot.xa *= (dot.x > canvas.width || dot.x < 0) ? -1 : 1;
         dot.ya *= (dot.y > canvas.height || dot.y < 0) ? -1 : 1;
-        // 绘制点
+        // 점 그리기
         ctx.fillRect(dot.x - 0.5, dot.y - 0.5, 1, 1);
-        // 循环比对粒子间的距离
+        // 입자 사이의 거리를 반복해서 비교한다
         for (var i = 0; i < ndots.length; i++) {
             var d2 = ndots[i];
             if (dot === d2 || d2.x === null || d2.y === null) continue;
             var xc = dot.x - d2.x;
             var yc = dot.y - d2.y;
-            // 两个粒子之间的距离
+            // 두 입자 사이의 거리
             var dis = xc * xc + yc * yc;
-            // 距离比
+            // 거리 비율
             var ratio;
-            // 如果两个粒子之间的距离小于粒子对象的max值，则在两个粒子间画线
+            // 두 입자 사이의 거리가 입자 객체의 max 값보다 작으면 두 입자 사이에 선을 긋는다
             if (dis < d2.max) {
-                // 如果是鼠标，则让粒子向鼠标的位置移动
+                // 마우스라면 입자를 마우스 위치 쪽으로 이동시킨다
 //                        if (d2 === warea && dis > (d2.max / 2)) {
 //                            dot.x -= xc * 0.03;
 //                            dot.y -= yc * 0.03;
 //                        }
-                // 计算距离比
+                // 거리 비율 계산
                 ratio = (d2.max - dis) / d2.max;
-                // 画线
+                // 선 긋기
                 ctx.beginPath();
                 ctx.lineWidth = ratio / 2;
                 ctx.strokeStyle = 'rgba(201,203,206,' + (ratio + 0.2) + ')';
@@ -84,7 +84,7 @@ function animate() {
                 ctx.stroke();
             }
         }
-        // 将已经计算过的粒子从数组中删除
+        // 이미 계산한 입자를 배열에서 제거한다
         ndots.splice(ndots.indexOf(dot), 1);
     });
     RAF(animate);

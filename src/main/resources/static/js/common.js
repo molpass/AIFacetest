@@ -205,11 +205,11 @@ function binb2b64(binarray)
 }
 
 /**
- * 生成指定长度随机字符串
+ * 지정한 길이의 랜덤 문자열을 생성한다
  */
 function randomString(len) {
     len = len || 32;
-    var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****默认去掉了容易混淆的字符oOLl,9gq,Vv,Uu,I1****/
+    var $chars = 'ABCDEFGHJKMNPQRSTWXYZabcdefhijkmnprstwxyz2345678';    /****혼동하기 쉬운 문자 oOLl,9gq,Vv,Uu,I1은 기본으로 제외했다****/
     var maxPos = $chars.length;
     var pwd = '';
     for (i = 0; i < len; i++) {
@@ -220,11 +220,11 @@ function randomString(len) {
 
 function chooseImage(){
     wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-        sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+        count: 1, // 기본값 9
+        sizeType: ['original', 'compressed'], // 원본/압축 이미지 지정 가능, 기본은 둘 다
+        sourceType: ['album', 'camera'], // 출처를 앨범/카메라로 지정 가능, 기본은 둘 다
         success: function (res) {
-            var localIds = res.localIds; // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            var localIds = res.localIds; // 선택한 사진의 로컬 ID 목록을 반환한다. localId는 img 태그의 src 속성으로 이미지 표시에 쓸 수 있다
             debugger;
         }
     });
@@ -254,12 +254,12 @@ function upload() {
     //         var signature = hex_sha1(string1);
     //
     //         wx.config({
-    //             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-    //             appId: appID, // 必填，公众号的唯一标识
-    //             timestamp: timestamp, // 必填，生成签名的时间戳
-    //             nonceStr: nonceStr, // 必填，生成签名的随机串
-    //             signature: signature,// 必填，签名，见附录1
-    //             jsApiList: ['chooseImage', 'uploadImage', 'downloadImage', 'previewImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    //             debug: false, // 디버그 모드 활성화. 호출한 모든 api의 반환값이 클라이언트에 alert로 표시된다. 전달 파라미터를 보려면 PC에서 열면 되며, 파라미터 정보는 log로 출력되고 PC에서만 출력된다.
+    //             appId: appID, // 필수, 공식 계정의 고유 식별자
+    //             timestamp: timestamp, // 필수, 서명 생성 타임스탬프
+    //             nonceStr: nonceStr, // 필수, 서명 생성용 랜덤 문자열
+    //             signature: signature,// 필수, 서명 (부록1 참조)
+    //             jsApiList: ['chooseImage', 'uploadImage', 'downloadImage', 'previewImage'] // 필수, 사용할 JS 인터페이스 목록 (전체 목록은 부록2 참조)
     //         });
     //
     //         wx.ready(function(){
@@ -272,28 +272,28 @@ function upload() {
 
     // var userToken = localStorage.getItem("userToken");
     // if ( userToken != null && userToken != "" && userToken != undefined) {
-    //     alert("每人仅限体验一次哦～");
+    //     alert("1인당 한 번만 체험할 수 있어요～");
     //     window.location.href = "result.html";
     // }
 
 
     wx.chooseImage({
-        count: 1, // 默认9
-        sizeType: ['compressed'], // 可以指定是原图还是压缩图，默认二者都有'original',
-        sourceType: ['album','camera'], // 可以指定来源是相册还是相机，默认二者都有
+        count: 1, // 기본값 9
+        sizeType: ['compressed'], // 원본/압축 이미지 지정 가능, 기본은 둘 다 'original',
+        sourceType: ['album','camera'], // 출처를 앨범/카메라로 지정 가능, 기본은 둘 다
         success: function (res) {
-            var localIds = res.localIds.toString(); // 返回选定照片的本地ID列表，localId可以作为img标签的src属性显示图片
+            var localIds = res.localIds.toString(); // 선택한 사진의 로컬 ID 목록을 반환한다. localId는 img 태그의 src 속성으로 이미지 표시에 쓸 수 있다
 
             wx.uploadImage({
-                localId: localIds, // 需要上传的图片的本地ID，由chooseImage接口获得
-                isShowProgressTips: 1, // 默认为1，显示进度提示
+                localId: localIds, // 업로드할 이미지의 로컬 ID. chooseImage 인터페이스로 얻는다
+                isShowProgressTips: 1, // 기본값 1, 진행률 표시
                 success: function (res) {
                     var userToken = localStorage.getItem("userToken");
                     if ( userToken == null || userToken == "" || userToken == undefined) {
                         userToken = randomString(10);
                         localStorage.setItem("userToken",userToken);
                     }
-                    var serverId = res.serverId; // 返回图片的服务器端ID
+                    var serverId = res.serverId; // 이미지의 서버 측 ID를 반환한다
                     var url = "/recognizeFace?picId="+serverId+"&userToken="+userToken;
 
                     var xmlhttp;
@@ -310,12 +310,12 @@ function upload() {
                         if (xmlhttp.readyState==4 && xmlhttp.status==200)
                         {
                             var data = JSON.parse(xmlhttp.responseText);
-                            //若返回no
+                            //no가 반환된 경우
                             if(data.success==false){
                                 alert(data.message);
                             }
 
-                            //若返回yes
+                            //yes가 반환된 경우
                             else{
                                 var facePic = document.getElementById("facePic");
                                 var uploadPic = document.getElementById("uploadPic");
@@ -401,10 +401,10 @@ function upload2(){
     var expression = document.getElementById("expression");
     var glass = document.getElementById("glass");
 
-    gender.innerHTML = "男";
+    gender.innerHTML = "남성";
     // age.innerHTML = "21";
-    expression.innerHTML = "微笑";
-    glass.innerHTML = "戴眼镜";
+    expression.innerHTML = "미소";
+    glass.innerHTML = "안경 착용";
 
     var startBtn = document.getElementById("startBtn");
     startBtn.style.display = "block";
@@ -481,12 +481,12 @@ function config() {
     //         var signature = hex_sha1(string1);
     //
     //         wx.config({
-    //             debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-    //             appId: appID, // 必填，公众号的唯一标识
-    //             timestamp: timestamp, // 必填，生成签名的时间戳
-    //             nonceStr: nonceStr, // 必填，生成签名的随机串
-    //             signature: signature,// 必填，签名，见附录1
-    //             jsApiList: ['chooseImage', 'uploadImage', 'downloadImage', 'previewImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+    //             debug: false, // 디버그 모드 활성화. 호출한 모든 api의 반환값이 클라이언트에 alert로 표시된다. 전달 파라미터를 보려면 PC에서 열면 되며, 파라미터 정보는 log로 출력되고 PC에서만 출력된다.
+    //             appId: appID, // 필수, 공식 계정의 고유 식별자
+    //             timestamp: timestamp, // 필수, 서명 생성 타임스탬프
+    //             nonceStr: nonceStr, // 필수, 서명 생성용 랜덤 문자열
+    //             signature: signature,// 필수, 서명 (부록1 참조)
+    //             jsApiList: ['chooseImage', 'uploadImage', 'downloadImage', 'previewImage'] // 필수, 사용할 JS 인터페이스 목록 (전체 목록은 부록2 참조)
     //         });
     //     });
 
@@ -512,12 +512,12 @@ function config() {
             var signature = hex_sha1(string1);
 
             wx.config({
-                debug: false, // 开启调试模式,调用的所有api的返回值会在客户端alert出来，若要查看传入的参数，可以在pc端打开，参数信息会通过log打出，仅在pc端时才会打印。
-                appId: appID, // 必填，公众号的唯一标识
-                timestamp: timestamp, // 必填，生成签名的时间戳
-                nonceStr: nonceStr, // 必填，生成签名的随机串
-                signature: signature,// 必填，签名，见附录1
-                jsApiList: ['chooseImage', 'uploadImage', 'downloadImage', 'previewImage'] // 必填，需要使用的JS接口列表，所有JS接口列表见附录2
+                debug: false, // 디버그 모드 활성화. 호출한 모든 api의 반환값이 클라이언트에 alert로 표시된다. 전달 파라미터를 보려면 PC에서 열면 되며, 파라미터 정보는 log로 출력되고 PC에서만 출력된다.
+                appId: appID, // 필수, 공식 계정의 고유 식별자
+                timestamp: timestamp, // 필수, 서명 생성 타임스탬프
+                nonceStr: nonceStr, // 필수, 서명 생성용 랜덤 문자열
+                signature: signature,// 필수, 서명 (부록1 참조)
+                jsApiList: ['chooseImage', 'uploadImage', 'downloadImage', 'previewImage'] // 필수, 사용할 JS 인터페이스 목록 (전체 목록은 부록2 참조)
             });
         }
     }

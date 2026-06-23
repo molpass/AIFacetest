@@ -2,7 +2,7 @@ package com.chaimm.ai.entity;
 
 /**
  * @author 大闲人柴毛毛
- * @date 2017/12/31 上午10:03
+ * @date 2017/12/31 오전 10:03
  * @description
  */
 public class Result {

@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta content="initial-scale=1.0,user-scalable=no,maximum-scale=1,width=device-width" name="viewport" />
     <meta content="telephone=no" name="format-detection" />
-    <title>Step1：上传照片</title>
+    <title>1단계: 사진 업로드</title>
     <link rel="stylesheet" type="text/css" href="../css/htmleaf-demo.css">
     <style type="text/css">
         .loader {
@@ -67,15 +67,6 @@
             text-align: right;
         }
     </style>
-    <script>
-        var _hmt = _hmt || [];
-        (function() {
-            var hm = document.createElement("script");
-            hm.src = "https://hm.baidu.com/hm.js?76ea15b55b1b6fbfd65463d26d7c662d";
-            var s = document.getElementsByTagName("script")[0];
-            s.parentNode.insertBefore(hm, s);
-        })();
-    </script>
 </head>
 <body>
 
@@ -83,7 +74,7 @@
 
     <canvas id="cas"></canvas>
 
-    <!--<div class="titleBox">人工智能帮您看面相</div>-->
+    <!--<div class="titleBox">AI 관상 분석</div>-->
     <div class="titleBox"><img src="../images/title.png" style="width: 230px;"></div>
 
     <div class="main-box" style="width: 300px;height: 300px; position:relative;box-shadow: 0px 3px 20px #b7b5b5;background-color: #f9f9f9;">
@@ -97,20 +88,20 @@
         <div id="analysisResult" style="display:none;position: absolute; right: 0; top: 0;background-color: rgba(0,0,0,0.2);color: white;border-top-right-radius: 20px;">
             <table width="100%">
                 <tr>
-                    <td class="right">性别：</td>
-                    <td class="left" id="gender">男生</td>
+                    <td class="right">성별:</td>
+                    <td class="left" id="gender">남성</td>
                 </tr>
                 <!--<tr>-->
-                    <!--<td class="right">年龄：</td>-->
-                    <!--<td class="left" id="age">24岁</td>-->
+                    <!--<td class="right">나이:</td>-->
+                    <!--<td class="left" id="age">24세</td>-->
                 <!--</tr>-->
                 <tr>
-                    <td class="right">表情：</td>
-                    <td class="left" id="expression">微笑</td>
+                    <td class="right">표정:</td>
+                    <td class="left" id="expression">미소</td>
                 </tr>
                 <tr>
-                    <td class="right">眼镜：</td>
-                    <td class="left" id="glass">有</td>
+                    <td class="right">안경:</td>
+                    <td class="left" id="glass">있음</td>
                 </tr>
             </table>
         </div>
@@ -134,7 +125,7 @@
             <div class="col-md-12">
                 <div class="loader">
                     <div class="loading-1"></div>
-                    <div id="loadingTxt" class="loading-2">特征点提取</div>
+                    <div id="loadingTxt" class="loading-2">특징점 추출</div>
                 </div>
             </div>
         </div>
@@ -164,11 +155,11 @@
             xhr.send('');
 
 
-            // 实时监听分析状态会导致服务器负载过高，这里采用优雅降级手段，节约一部分服务器资源
-            document.getElementById('loadingTxt').innerHTML = '特征点提取';
-            setTimeout("document.getElementById('loadingTxt').innerHTML = 'Softmax特征分类'", 1000);
-            setTimeout("document.getElementById('loadingTxt').innerHTML = '生成卷积神经网络模型'", 2000);
-            setTimeout("document.getElementById('loadingTxt').innerHTML = '数据汇总中'", 3000);
+            // 분석 상태를 실시간으로 감시하면 서버 부하가 과도해지므로, 여기서는 우아한 성능 저하 기법을 써서 서버 자원을 일부 절약한다
+            document.getElementById('loadingTxt').innerHTML = '특징점 추출';
+            setTimeout("document.getElementById('loadingTxt').innerHTML = 'Softmax 특징 분류'", 1000);
+            setTimeout("document.getElementById('loadingTxt').innerHTML = '합성곱 신경망 모델 생성'", 2000);
+            setTimeout("document.getElementById('loadingTxt').innerHTML = '데이터 집계 중'", 3000);
 
             setTimeout("window.location.href='result.html'", 5000);
         }

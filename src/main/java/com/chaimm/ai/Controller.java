@@ -20,7 +20,7 @@ import static com.chaimm.ai.entity.Parameter.*;
 
 /**
  * @author 大闲人柴毛毛
- * @date 2017/12/31 上午11:37
+ * @date 2017/12/31 오전 11:37
  * @description
  */
 @RestController
@@ -39,7 +39,7 @@ public class Controller {
     }
 
     private void getTicket() {
-        //获取ticket
+        //ticket 가져오기
         String param = "access_token="+ Parameter.AccessToken_Parameters+"&type=jsapi";
         String ticket_result = HttpRequest.sendGet("https://api.weixin.qq.com/cgi-bin/ticket/getticket", param);
         String ticket = "";
@@ -49,13 +49,13 @@ public class Controller {
             e.printStackTrace();
         }
         Parameter.Ticket_Parameter = ticket;
-        System.out.println("获取到的ticket="+ticket);
-//                System.out.println("Parameter中的ticket="+Parameter.Ticket_Parameter);
+        System.out.println("가져온 ticket="+ticket);
+//                System.out.println("Parameter의 ticket="+Parameter.Ticket_Parameter);
     }
 
 //    @GetMapping("getAccessToken")
     public String getAccessToken(){
-        //获取access_token
+        //access_token 가져오기
         String param = "grant_type=client_credential&appid="+APPID+"&secret="+SECRET;
         String access_token_result = HttpRequest.sendGet("https://api.weixin.qq.com/cgi-bin/token", param);
         String access_token = "";
@@ -78,19 +78,19 @@ public class Controller {
         String fileName = HttpRequest.downloadByGet("http://file.api.weixin.qq.com/cgi-bin/media/get", "access_token="+Parameter.AccessToken_Parameters+"&media_id="+picId);
         System.out.println(fileName);
 
-        //图片下载失败时：1.提示管理员，2.将pic_id保存至数据库，让管理员手动下载
+        //이미지 다운로드 실패 시: 1.관리자에게 알림, 2.pic_id를 DB에 저장해 관리자가 수동으로 다운로드하도록 함
         if(fileName==null){
-            return Result.newFailResult("文件上传失败！");
+            return Result.newFailResult("파일 업로드에 실패했습니다!");
         }
 
         try {
-            // 识别图片
+            // 이미지 인식
             JSONObject jsonObject = ImageTool.recognizeFace(URL_PATH+fileName);
 
-            // 绘图
+            // 그리기
             String paintedFileName = ImageTool.paintImage(jsonObject, new File(Parameter.ABS_PATH+fileName));
 
-            // 老用户直接返回结果
+            // 기존 사용자는 결과를 바로 반환
 //            System.out.println("userToken="+userToken);
 //            String resultURL = Parameter.userResultMap.get(userToken);
 //            System.out.println("resultURL="+resultURL);
@@ -98,10 +98,10 @@ public class Controller {
 //                return buildResult(jsonObject, paintedFileName, resultURL);
 //            }
 
-            // TODO 生成分析结果
+            // TODO 분석 결과 생성
             String resultURL = createResultURL(userToken, jsonObject);
 
-            // 构造返回结果
+            // 반환 결과 구성
             return buildResult(jsonObject, paintedFileName, resultURL);
         } catch (CommonExp e) {
             e.printStackTrace();
@@ -109,8 +109,8 @@ public class Controller {
             return Result.newFailResult(e.getMessage());
         } catch (Exception e) {
             e.printStackTrace();
-            System.out.println(Result.newFailResult("服务器被挤爆了！请稍后重试").toString());
-            return Result.newFailResult("服务器被挤爆了！请稍后重试");
+            System.out.println(Result.newFailResult("서버가 과부하 상태입니다! 잠시 후 다시 시도해 주세요").toString());
+            return Result.newFailResult("서버가 과부하 상태입니다! 잠시 후 다시 시도해 주세요");
         }
 
 
@@ -125,7 +125,7 @@ public class Controller {
         String fileName_yanzhi = fileNameList_yanzhi.get(new Random().nextInt(fileNameList_yanzhi.size()));
         String fileName_nengli = fileNameList_nengli.get(new Random().nextInt(fileNameList_nengli.size()));
 
-        // TODO 对dirName要进行编码
+        // TODO dirName을 인코딩해야 함
         String resultURL = Parameter.URL_PATH+"result/yanzhi/"+dirName+"/"+fileName_yanzhi + "," +
                 Parameter.URL_PATH+"result/nengli/"+dirName+"/"+fileName_nengli;
 
@@ -175,23 +175,23 @@ public class Controller {
         result.setSuccess(true);
 
         if (gender.intValue() == 0) {
-            result.setGender("女生");
+            result.setGender("여성");
         } else {
-            result.setGender("男生");
+            result.setGender("남성");
         }
 
         if (glass.intValue() == 0) {
-            result.setGlass("未戴眼镜");
+            result.setGlass("안경 미착용");
         } else {
-            result.setGlass("有眼镜");
+            result.setGlass("안경 착용");
         }
 
         result.setAge(age.intValue());
 
         if (expression.intValue() == 1) {
-            result.setExpression("微笑");
+            result.setExpression("미소");
         } else {
-            result.setExpression("没有微笑");
+            result.setExpression("무표정");
         }
 
         result.setFaceUrl(Parameter.URL_PATH +"ai/"+ paintedFileName);
@@ -202,10 +202,10 @@ public class Controller {
 
     public static void main(String[] args) {
         try {
-            // 识别图片
+            // 이미지 인식
             JSONObject jsonObject = ImageTool.recognizeFace("http://www.chaimm.com:8080/upload/1515062968");
 
-            // 绘图
+            // 그리기
             File file = new File("/Users/chibozhou/Downloads/WechatIMG4.jpeg");
             String paintedFileName = ImageTool.paintImage(jsonObject, file);
 

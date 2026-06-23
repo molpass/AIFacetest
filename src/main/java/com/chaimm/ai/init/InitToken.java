@@ -19,7 +19,7 @@ import static com.chaimm.ai.entity.Parameter.userResultMap;
 
 /**
  * @author 大闲人柴毛毛
- * @date 2017/12/31 下午1:49
+ * @date 2017/12/31 오후 1:49
  * @description
  */
 @Component
@@ -27,23 +27,23 @@ public class InitToken implements CommandLineRunner {
 
     @Override
     public void run(String... strings) throws Exception {
-        //定时线程1:每隔1.5时获取一次access_token5400000
+        //정시 스레드1: 1.5시간마다 access_token을 한 번씩 가져온다 5400000
 //        getAccess_token(300000);
 
-        //定时线程1:每隔1.5时获取一次ticket
+        //정시 스레드1: 1.5시간마다 ticket을 한 번씩 가져온다
 //        getTicket(5400000);
 
-        // 加载用户信息
+        // 사용자 정보 로드
 //        loadUser();
 
-        // 加载分析结果
+        // 분석 결과 로드
         loadResults();
     }
 
     private void loadResults() {
-        // 加载"颜值"的分析结果
+        // "외모(yanzhi)" 분석 결과 로드
         loadYanzhiResults();
-        // 加载"能力"的分析结果
+        // "능력(nengli)" 분석 결과 로드
         loadNengliResults();
 
         System.out.println(JSONObject.toJSON(Parameter.resultMap_yanzhi).toString());
@@ -92,7 +92,7 @@ public class InitToken implements CommandLineRunner {
 
 
     /**
-     * 定时线程：获取access_token
+     * 정시 스레드: access_token 가져오기
      */
     private boolean getAccess_token(long time){
         if(time<=0) {
@@ -102,7 +102,7 @@ public class InitToken implements CommandLineRunner {
         Timer timer = new Timer();
         TimerTask task =new TimerTask(){
             public void run(){
-                //获取access_token
+                //access_token 가져오기
                 String param = "grant_type=client_credential&appid="+APPID+"&secret="+SECRET;
                 String access_token_result = HttpRequest.sendGet("https://api.weixin.qq.com/cgi-bin/token", param);
                 String access_token = "";
@@ -112,18 +112,18 @@ public class InitToken implements CommandLineRunner {
                     e.printStackTrace();
                 }
                 Parameter.AccessToken_Parameters = access_token;
-                System.out.println("获取到的access_token="+access_token);
-//                System.out.println("Parameter中的access_token="+Parameter.AccessToken_Parameters);
+                System.out.println("가져온 access_token="+access_token);
+//                System.out.println("Parameter의 access_token="+Parameter.AccessToken_Parameters);
 
                 getTicket();
             }
         };
-        timer.scheduleAtFixedRate(task, new Date(),time);//当前时间开始起动 每次间隔n秒再启动
+        timer.scheduleAtFixedRate(task, new Date(),time);//현재 시각부터 시작해 매 n초 간격으로 다시 실행
         return true;
     }
 
     private void getTicket() {
-        //获取ticket
+        //ticket 가져오기
         String param = "access_token="+ Parameter.AccessToken_Parameters+"&type=jsapi";
         String ticket_result = HttpRequest.sendGet("https://api.weixin.qq.com/cgi-bin/ticket/getticket", param);
         String ticket = "";
@@ -133,13 +133,13 @@ public class InitToken implements CommandLineRunner {
             e.printStackTrace();
         }
         Parameter.Ticket_Parameter = ticket;
-        System.out.println("获取到的ticket="+ticket);
-//                System.out.println("Parameter中的ticket="+Parameter.Ticket_Parameter);
+        System.out.println("가져온 ticket="+ticket);
+//                System.out.println("Parameter의 ticket="+Parameter.Ticket_Parameter);
     }
 
 
     /**
-     * 定时线程：获取ticket
+     * 정시 스레드: ticket 가져오기
      */
     private boolean getTicket(long time){
         if(time<=0) {
@@ -149,7 +149,7 @@ public class InitToken implements CommandLineRunner {
         Timer timer = new Timer();
         TimerTask task =new TimerTask(){
             public void run(){
-                //获取ticket
+                //ticket 가져오기
                 String param = "access_token="+ Parameter.AccessToken_Parameters+"&type=jsapi";
                 String ticket_result = HttpRequest.sendGet("https://api.weixin.qq.com/cgi-bin/ticket/getticket", param);
                 String ticket = "";
@@ -159,11 +159,11 @@ public class InitToken implements CommandLineRunner {
                     e.printStackTrace();
                 }
                 Parameter.Ticket_Parameter = ticket;
-                System.out.println("获取到的ticket="+ticket);
-//                System.out.println("Parameter中的ticket="+Parameter.Ticket_Parameter);
+                System.out.println("가져온 ticket="+ticket);
+//                System.out.println("Parameter의 ticket="+Parameter.Ticket_Parameter);
             }
         };
-        timer.scheduleAtFixedRate(task, 10000,time);//当前时间开始起动 每次间隔n秒再启动
+        timer.scheduleAtFixedRate(task, 10000,time);//현재 시각부터 시작해 매 n초 간격으로 다시 실행
         return true;
     }
 

@@ -6,7 +6,7 @@ import java.util.Map;
 
 /**
  * @author 大闲人柴毛毛
- * @date 2017/12/31 下午1:56
+ * @date 2017/12/31 오후 1:56
  * @description
  */
 public class Parameter {
@@ -33,6 +33,6 @@ public class Parameter {
 
     public static final String resultPath_yanzhi = "/usr/web/tomcat/webapps/upload/result/yanzhi/";
     public static final String resultPath_nengli = "/usr/web/tomcat/webapps/upload/result/nengli/";
-//    public static final String resultPath_yanzhi = "/Users/chibozhou/百度云同步盘/project\\(1\\)/柴毛毛公众号/result/yanzhi/";
-//    public static final String resultPath_nengli = "/Users/chibozhou/百度云同步盘/project\\(1\\)/柴毛毛公众号/result/nengli/";
+//    public static final String resultPath_yanzhi = "/Users/chibozhou/바이두클라우드 동기화폴더/project\\(1\\)/차이마오마오 공식계정/result/yanzhi/";
+//    public static final String resultPath_nengli = "/Users/chibozhou/바이두클라우드 동기화폴더/project\\(1\\)/차이마오마오 공식계정/result/nengli/";
 }
